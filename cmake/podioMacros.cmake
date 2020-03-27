@@ -143,3 +143,45 @@ function(PODIO_GENERATE_DATAMODEL datamodel YAML_FILE RETURN_HEADERS RETURN_SOUR
     )
 
 endfunction()
+
+
+#---------------------------------------------------------------------------------------------------
+#  MACRO: podio_set_compiler_flags
+#
+#  Set compiler flags
+#
+#---------------------------------------------------------------------------------------------------
+macro(podio_set_compiler_flags)
+  include(CheckCXXCompilerFlag)
+
+  # -Wall -Wextra -Wshadow -pedantic -Wformat-security -Wno-long-long -Wdeprecated
+  SET(COMPILER_FLAGS -fdiagnostics-color=auto)
+
+  # AppleClang/Clang specific warning flags
+  if(CMAKE_CXX_COMPILER_ID MATCHES "^(Apple)?Clang$")
+    set(COMPILER_FLAGS ${COMPILER_FLAGS} -Winconsistent-missing-override -Wno-c++1z-extensions -Wheader-hygiene )
+    set(COMPILER_FLAGS ${COMPILER_FLAGS} -std=c++${CMAKE_CXX_STANDARD} -stdlib=libc++)
+    set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
+  endif()
+
+  FOREACH( FLAG ${COMPILER_FLAGS} )
+    ## meed to replace the minus or plus signs from the variables, because it is passed
+    ## as a macro to g++ which causes a warning about no whitespace after macro
+    ## definition
+    STRING(REPLACE "-" "_" FLAG_WORD ${FLAG} )
+    STRING(REPLACE "+" "P" FLAG_WORD ${FLAG_WORD} )
+    CHECK_CXX_COMPILER_FLAG( "${FLAG}" CXX_FLAG_WORKS_${FLAG_WORD} )
+    IF( ${CXX_FLAG_WORKS_${FLAG_WORD}} )
+      SET ( CMAKE_CXX_FLAGS "${FLAG} ${CMAKE_CXX_FLAGS} ")
+    ENDIF()
+  ENDFOREACH()
+
+  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+    SET ( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-undefined,error")
+  elseif ( ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang") OR ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" ))
+    SET ( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
+  else()
+    MESSAGE( WARNING "We do not test with the ${CMAKE_CXX_COMPILER_ID} compiler, use at your own discretion" )
+  endif()
+
+endmacro(podio_set_compiler_flags)

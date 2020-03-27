@@ -44,13 +44,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 message(STATUS "Setting C++ standard: '${CMAKE_CXX_STANDARD}'.")
 
-if (${APPLE})
-    set(CPP_STANDARD_FLAGS "-std=c++${CMAKE_CXX_STANDARD}\ -stdlib=libc++")
-    set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
-endif()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPP_STANDARD_FLAGS}")
-
-
 #--- Declare options -----------------------------------------------------------
 option(CREATE_DOC "Whether or not to create doxygen doc target." OFF)
 
@@ -66,6 +59,8 @@ endif()
 
 #--- enable podio macros--------------------------------------------------------
 include(cmake/podioMacros.cmake)
+
+podio_set_compiler_flags()
 
 #--- enable unit testing capabilities ------------------------------------------
 include(CTest)
