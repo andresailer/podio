@@ -160,14 +160,16 @@ macro(podio_set_compiler_flags)
   # AppleClang/Clang specific warning flags
   if(CMAKE_CXX_COMPILER_ID MATCHES "^(Apple)?Clang$")
     set(COMPILER_FLAGS ${COMPILER_FLAGS} -Winconsistent-missing-override -Wno-c++1z-extensions -Wheader-hygiene )
-    set(COMPILER_FLAGS ${COMPILER_FLAGS} -std=c++${CMAKE_CXX_STANDARD} -stdlib=libc++)
+  endif()
+  if(APPLE)
+    set(COMPILER_FLAGS ${COMPILER_FLAGS} "-std=c++${CMAKE_CXX_STANDARD}\ -stdlib=libc++")
     set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
   endif()
-
   FOREACH( FLAG ${COMPILER_FLAGS} )
     ## meed to replace the minus or plus signs from the variables, because it is passed
     ## as a macro to g++ which causes a warning about no whitespace after macro
     ## definition
+    STRING(REPLACE " " "_" FLAG_WORD ${FLAG} )
     STRING(REPLACE "-" "_" FLAG_WORD ${FLAG} )
     STRING(REPLACE "+" "P" FLAG_WORD ${FLAG_WORD} )
     CHECK_CXX_COMPILER_FLAG( "${FLAG}" CXX_FLAG_WORKS_${FLAG_WORD} )
