@@ -3,4 +3,4 @@ max-line-length = 99
 extend-ignore = E203
 
 per-file-ignores =
-  python/podio_gen/test_MemberParser.py: E501
+  python/podio/gen/test_MemberParser.py: E501

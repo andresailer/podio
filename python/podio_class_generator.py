@@ -6,10 +6,10 @@ import os
 import subprocess
 
 
-from podio_gen.podio_config_reader import PodioConfigReader
-from podio_gen.generator_utils import DefinitionError
-from podio_gen.cpp_generator import CPPClassGenerator
-from podio_gen.julia_generator import JuliaClassGenerator
+from podio.gen.podio_config_reader import PodioConfigReader
+from podio.gen.generator_utils import DefinitionError
+from podio.gen.cpp_generator import CPPClassGenerator
+from podio.gen.julia_generator import JuliaClassGenerator
 
 
 def has_clang_format():

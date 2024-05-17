@@ -4,8 +4,8 @@
 import sys
 import argparse
 import yaml
-from podio_class_generator import read_upstream_edm
-from podio_gen.podio_config_reader import PodioConfigReader
+from podio.podio_class_generator import read_upstream_edm
+from podio.gen.podio_config_reader import PodioConfigReader
 
 try:
     from graphviz import Digraph

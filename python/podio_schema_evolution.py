@@ -5,7 +5,7 @@ Provides infrastructure for analyzing schema definitions for schema evolution
 
 import yaml
 
-from podio_gen.podio_config_reader import PodioConfigReader
+from podio.gen.podio_config_reader import PodioConfigReader
 
 
 # @TODO: not really a good class model here

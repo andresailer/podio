@@ -7,10 +7,10 @@ PODIO only makes use of rather basic Jinja2 templates, so it should in principle
 
 ## Preprocessing of yaml file
 
-The entry point for reading yaml files is the [`python/podio_gen/podio_config_reader.py`](/python/podio_gen/podio_config_reader.py).
-When reading the yaml file a basic validation is run and the data members, relations and vector members of components and datatypes are parsed into `MemberVariable` objects (defined in [`python/podio_gen/generator_utils.py`](/python/podio_gen/generator_utils.py)).
+The entry point for reading yaml files is the [`python/podio/gen/podio_config_reader.py`](/python/podio/gen/podio_config_reader.py).
+When reading the yaml file a basic validation is run and the data members, relations and vector members of components and datatypes are parsed into `MemberVariable` objects (defined in [`python/podio/gen/generator_utils.py`](/python/podio/gen/generator_utils.py)).
 The main entry point to the code generation is the [`python/podio_class_generator.py`](/python/podio_class_generator.py) which takes care of instantiating the language specific code generator (either C++ or a prototype version for Julia at this point).
-The language specific generators inherit from the [`ClassGeneratorBaseMixin`](/python/podio_gen/generator_base.py) which takes care of some common initialization and provides some common functionality for code generation.
+The language specific generators inherit from the [`ClassGeneratorBaseMixin`](/python/podio/gen/generator_base.py) which takes care of some common initialization and provides some common functionality for code generation.
  In the end each language specific generator will take care of (either by itself or through the common functionality in `ClassGeneratorBaseMixin`):
 - Configuring the Jinja2 template engine. At the moment this is mainly making the templates known to the engine.
 - The necessary preprocessing of all the datatypes and components. This includes collecting necessary include directories and forward declaration, as well as digesting `ExtraCode` snippets.
@@ -18,7 +18,7 @@ The language specific generators inherit from the [`ClassGeneratorBaseMixin`](/p
 - Calling the template engine to fill the necessary templates for each datatype or component and making sure to only write to disk if the filled template actually changed. Optionally run `clang-format` on them before writing.
 - Producing a list of generated c++ files for consumption by the cmake macros of PODIO.
 
-Currently two language specific generators are available: [`CPPClassGenerator`](/python/podio_gen/cpp_generator.py) and [`JuliaClassGenerator`](/python/podio_gen/julia_generator.py).
+Currently two language specific generators are available: [`CPPClassGenerator`](/python/podio/gen/cpp_generator.py) and [`JuliaClassGenerator`](/python/podio/gen/julia_generator.py).
 Note that some of the information below will only apply to either of these generators as they provide the template engine with slightly different content.
 
 ## Existing templates
